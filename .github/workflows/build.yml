@@ -58,16 +58,16 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - bazzite
-          - bazzite-gnome
+          # - bazzite
+          # - bazzite-gnome
           - bazzite-deck
-          - bazzite-deck-gnome
-          - bazzite-deck-nvidia
-          - bazzite-deck-nvidia-gnome
-          - bazzite-nvidia
-          - bazzite-gnome-nvidia
-          - bazzite-nvidia-open
-          - bazzite-gnome-nvidia-open
+          # - bazzite-deck-gnome
+          # - bazzite-deck-nvidia
+          # - bazzite-deck-nvidia-gnome
+          # - bazzite-nvidia
+          # - bazzite-gnome-nvidia
+          # - bazzite-nvidia-open
+          # - bazzite-gnome-nvidia-open
         include:
           - fedora_version: 43
             kernel_version: ${{ (github.ref_name == 'testing' || github.ref_name == 'unstable') && 'latest' || 'latest' }}
@@ -137,7 +137,7 @@ jobs:
 
           KERNEL_URI=ghcr.io/eldarock/kernel-bazzite:${{ matrix.kernel_version }}-f${{ matrix.fedora_version }}-${{ matrix.arch }}
           echo "kernel_ref=${KERNEL_URI}" >> $GITHUB_OUTPUT
-          NVIDIA_URI=ghcr.io/bazzite-org/nvidia-drivers
+          NVIDIA_URI=ghcr.io/eldarock/nvidia-drivers
           echo "nvidia_ref=${NVIDIA_URI}" >> $GITHUB_OUTPUT
 
           echo "Generated the following:"
@@ -211,7 +211,7 @@ jobs:
           #
           # This needs to be tweaked, we need to verify a digest
           # and to confirm it is from a protected branch
-          gh attestation verify -R bazzite-org/kernel-bazzite \
+          gh attestation verify -R eldarock/kernel-bazzite \
             "oci://${{ steps.base.outputs.kernel_ref }}" --deny-self-hosted-runners
           sudo podman pull ${{ steps.base.outputs.kernel_ref }}
 
@@ -220,7 +220,7 @@ jobs:
             NVIDIA_VERSION=$(jq -r '.Labels["${{ steps.base.outputs.nvidia_version }}"]' kernel_source.json)
             NVIDIA_REF="${{ steps.base.outputs.nvidia_ref }}:${NVIDIA_VERSION}-f${{ matrix.fedora_version }}-${{ matrix.arch }}"
             # Same as above, we verify the uri moments before we pull it
-            gh attestation verify -R bazzite-org/nvidia-drivers \
+            gh attestation verify -R eldarock/nvidia-drivers \
               "oci://$NVIDIA_REF" --deny-self-hosted-runners --source-ref "refs/heads/master"
             sudo podman pull "$NVIDIA_REF"
             echo "nvidia_ref=$NVIDIA_REF" >> $GITHUB_OUTPUT
