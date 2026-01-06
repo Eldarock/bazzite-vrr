@@ -155,6 +155,7 @@ jobs:
         continue-on-error: true
         env:
           docs_repo: ublue-os/docs.bazzite.gg
+          GH_TOKEN: ${{ github.token }}
         run: |
           DOCS_DIR="${{ github.workspace }}/system_files/desktop/shared/usr/share/ublue-os/docs/html"
           mkdir -p $DOCS_DIR

@@ -94,7 +94,7 @@ jobs:
       - name: Determine Flatpak Dependencies
         id: flatpak_dependencies
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -ex
