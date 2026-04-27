@@ -288,23 +288,15 @@ rm -vf /etc/skel/.config/autostart/steam*.desktop
 # Remove packages that shouldnt be used in a live session
 dnf -yq remove steam lutris bazaar || :
 
+# Don't check for verified image
+rm -vf /etc/profile.d/verify_motd.sh
+
 (
     wallpaper_url=https://github.com/ublue-os/bazzite/raw/refs/heads/main/press_kit/art/Convergence_Wallpaper_DX.jxl
     wallpaper_file=/usr/share/wallpapers/convergence.jxl
     wget -nv -O "$wallpaper_file" "$wallpaper_url"
     rm -f /usr/share/backgrounds/default.xml
 )
-
-echo "Copying shared system files..."
-cp -a /src/system_files/shared/. /
-
-if [[ "$desktop_env" == "gnome" ]]; then
-    echo "Copying GNOME-specific system files..."
-    cp -a /src/system_files/gnome/. /
-elif [[ "$desktop_env" == "kde" ]]; then
-    echo "Copying KDE-specific system files..."
-    cp -a /src/system_files/kde/. /
-fi
 
 # Enable on-screen keyboard
 if [[ $imageref == *-deck* ]]; then
